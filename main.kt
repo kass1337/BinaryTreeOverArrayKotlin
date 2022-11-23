@@ -45,14 +45,14 @@ fun main(args: Array<String>) {
     btsArray.printTree()
 
     println("-----SAVE IN BINARY FILE----")
-    btsArray.save()
+    btsArray.save(protoType)
 
     println("-----------BALANCE----------")
     btsArray = btsArray.balance()
     btsArray.printTree()
 
     println("---LOAD FROM BINARY FILE----")
-    btsArray = btsArray.load()!!
+    btsArray = btsArray.load(protoType)!!
     btsArray.printTree()
 
     println("---------FOR EACH-----------")
@@ -92,14 +92,14 @@ fun main(args: Array<String>) {
     btsArray.printTree()
 
     println("-----SAVE IN BINARY FILE----")
-    btsArray.save()
+    btsArray.save(protoType)
 
     println("-----------BALANCE----------")
     btsArray = btsArray.balance()
     btsArray.printTree()
 
     println("---LOAD FROM BINARY FILE----")
-    btsArray = btsArray.load()!!
+    btsArray = btsArray.load(protoType)!!
     btsArray.printTree()
 
     println("---------FOR EACH-----------")

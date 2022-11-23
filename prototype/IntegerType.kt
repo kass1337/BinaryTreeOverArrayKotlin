@@ -12,7 +12,7 @@ import java.util.stream.Collectors
 
 class IntegerType : ProtoType {
     override fun typeName(): String? {
-        return "INTEGER"
+        return "Integer"
     }
 
     override fun create(): Any? {
@@ -34,10 +34,13 @@ class IntegerType : ProtoType {
         )
     }
 
-    override fun parseValue(someString: String?): Any? {
+    override fun parseValue(someString: String?): Any {
         return IntegerClass(someString!!.toInt())
     }
 
     override val typeComparator: Comparator
         get() = IntegerComparator()
+    override fun toString(`object`: Any): String {
+        return `object`.toString()
+    }
 }

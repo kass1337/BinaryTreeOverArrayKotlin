@@ -12,7 +12,7 @@ import java.util.stream.Collectors
 
 class DateTimeType : ProtoType {
     override fun typeName(): String? {
-        return "DATETIME"
+        return "DateTime"
     }
 
     override fun create(): Any? {
@@ -85,7 +85,7 @@ class DateTimeType : ProtoType {
         )
     }
 
-    override fun parseValue(someString: String?): Any? {
+    override fun parseValue(someString: String?): Any {
         val words = someString!!.split(" ".toRegex()).toTypedArray()
         val dateStr = words[0].split("/".toRegex()).toTypedArray()
         val timeStr = words[1].split(":".toRegex()).toTypedArray()
@@ -95,7 +95,7 @@ class DateTimeType : ProtoType {
             dateInt[i] = dateStr[i].toInt()
             timeInt[i] = timeStr[i].toInt()
         }
-        var dateTimeValue: DateTimeClass?
+        var dateTimeValue: DateTimeClass
         try {
             dateTimeValue = dateInt[1]?.let {
                 dateInt[0]?.let { it1 ->
@@ -112,7 +112,7 @@ class DateTimeType : ProtoType {
                         }
                     }
                 }
-            }
+            }!!
         } catch (ex: Exception) {
             println("Bad date, generating using a static values")
             dateTimeValue = DateTimeClass()
@@ -122,4 +122,7 @@ class DateTimeType : ProtoType {
 
     override val typeComparator: Comparator
         get() = DateTimeComparator()
+    override fun toString(`object`: Any): String {
+        return `object`.toString()
+    }
 }

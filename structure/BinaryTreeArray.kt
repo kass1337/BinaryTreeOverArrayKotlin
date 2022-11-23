@@ -1,14 +1,10 @@
 package structure
 
 import Comparator.*
+import prototype.ProtoType
 import structure.*
-import java.io.FileOutputStream
-import java.io.ObjectOutputStream
-import java.io.IOException
-import java.io.FileInputStream
-import java.io.ObjectInputStream
+import java.io.*
 import java.lang.ClassNotFoundException
-import java.io.Serializable
 import java.lang.Exception
 import java.util.ArrayList
 import java.util.Vector
@@ -38,32 +34,54 @@ class BinaryTreeArray : Serializable {
         arrayTree = t
     }
 
-    fun save() {
-        try {
-            val outputStream = FileOutputStream("saved.ser")
-            val out = ObjectOutputStream(outputStream)
-            out.writeObject(this)
-            out.close()
-            outputStream.close()
-        } catch (i: IOException) {
-            i.printStackTrace()
+    fun save(protoType: ProtoType?) {
+        val writer = BufferedWriter(FileWriter("saved"))
+        if (protoType != null) {
+            writer.write(protoType.typeName() + "\n")
         }
+        this.forEach(object : DoWith {
+            override fun doWith(obj: Any?) {
+                val x = obj
+                if (protoType != null) {
+                    writer.write(
+                        """
+                                    ${protoType.toString(x!!)}
+                                    
+                                    """.trimIndent()
+                    )
+                }
+            }
+        })
+        if (writer != null) writer.close()
     }
 
-    fun load(): BinaryTreeArray? {
-        var loadedArrayTree: BinaryTreeArray? = null
+
+
+    fun load(protoType: ProtoType?): BinaryTreeArray? {
+         val fileName = "saved"
+        val bts = BinaryTreeArray(this.comparator)
         try {
-            val fileIn = FileInputStream("saved.ser")
-            val `in` = ObjectInputStream(fileIn)
-            loadedArrayTree = `in`.readObject() as BinaryTreeArray
-            `in`.close()
-            fileIn.close()
-        } catch (i: IOException) {
-            i.printStackTrace()
-        } catch (e: ClassNotFoundException) {
-            e.printStackTrace()
+            BufferedReader(FileReader(fileName)).use { br ->
+                var line: String?
+                line = br.readLine()
+                if (protoType != null) {
+                    if (!protoType.typeName().equals(line)) {
+                        throw Exception("Wrong file structure")
+                    }
+                }
+                while (br.readLine().also { line = it } != null) {
+                    if (protoType != null) {
+
+                            bts.addValue(protoType.parseValue(line!!))
+
+
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            throw RuntimeException(e)
         }
-        return loadedArrayTree
+        return bts;
     }
 
     // Вcпомогательный метод вставки значения в массив
@@ -119,7 +137,19 @@ class BinaryTreeArray : Serializable {
         } else print(arrayTree!![current].toString() + " ")
         scan(2 * current + 2, level + 1, boolTree)
     }
+    private fun scanForSave(current: Int, level: Int, boolTree: Boolean, values: ArrayList<String>) {
+        if (current >= size) return
+        if (arrayTree!![current] == null) return
+        scanForSave(2 * current + 1, level + 1, boolTree, values)
+        if (boolTree) {
+            for (i in 0 until level)
 
+                    values.add(arrayTree!![current].toString())
+
+
+        }
+        scanForSave(2 * current + 2, level + 1, boolTree, values)
+    }
     fun printTree() {
         scan(0, 0, true)
     }

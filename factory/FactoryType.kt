@@ -7,24 +7,23 @@ import prototype.IntegerType
 import java.util.ArrayList
 
 class FactoryType {
-    val typeNameList: ArrayList<String>
-        get() {
-            val list = ArrayList<String>()
-            for (at in AvailableTypes.values()) {
-                list.add(at.toString())
-            }
-            return list
-        }
+    private var typeNameList : List<ProtoType> = listOf(IntegerType(), DateTimeType())
 
-    fun getBuilderByName(name: String?): ProtoType? {
-        when (name) {
-            "Integer" -> {
-                return IntegerType()
-            }
-            "DateTime" -> {
-                return DateTimeType()
-            }
+    fun getTypeNameList(): List<String?>{
+        var listOfType: List<String?> = listOf()
+        for (t in typeNameList){
+            listOfType +=  t.typeName()
         }
-        return null
+        return listOfType
     }
+
+    fun getBuilderByName(name: String): ProtoType{
+        if (name == null) throw NullPointerException()
+        for (userType in typeNameList){
+            if (name == userType.typeName())
+                return userType
+        }
+        throw IllegalArgumentException()
+    }
+
 }

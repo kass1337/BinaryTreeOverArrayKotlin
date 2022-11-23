@@ -93,12 +93,12 @@ class GUI : JPanel(), ActionListener {
 
         // обработчик сохранения
         if (e.source === saveBinary) {
-            btsArray!!.save()
+            btsArray!!.save(protoType)
         }
 
         // обработчик загрузки
         if (e.source === loadBinary) {
-            btsArray = btsArray!!.load()
+            btsArray = btsArray!!.load(protoType)
             rewrite()
         }
     }
@@ -113,10 +113,10 @@ class GUI : JPanel(), ActionListener {
         btsArray = BinaryTreeArray(protoType!!.typeComparator)
 
         //construct preComponent
-        val typeNameList = factoryType.typeNameList
-        val FactoryListItems = arrayOfNulls<String>(typeNameList.size)
+        val typeNameList = factoryType.getTypeNameList()
+        val factoryListItems = arrayOfNulls<String>(typeNameList.size)
         for (i in typeNameList.indices) {
-            FactoryListItems[i] = typeNameList[i]
+            factoryListItems[i] = typeNameList[i]
         }
 
         //construct components
@@ -129,7 +129,7 @@ class GUI : JPanel(), ActionListener {
         mainText = JTextArea(5, 5)
         deleteTextField = JTextField(5)
         findTextField = JTextField(5)
-        factoryList = JComboBox<Any?>(FactoryListItems)
+        factoryList = JComboBox<Any?>(factoryListItems)
 
         //adjust size and set layout
         preferredSize = Dimension(908, 577)

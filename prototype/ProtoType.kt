@@ -17,8 +17,9 @@ interface ProtoType {
     fun readValue(inputStream: InputStream?): Any?
 
     // Создает и парсит содержимое из строки
-    fun parseValue(someString: String?): Any?
+    fun parseValue(someString: String?): Any
 
     // Возврат компаратора для сравнения
     val typeComparator: Comparator?
+    fun toString(`object`: Any): String
 }
